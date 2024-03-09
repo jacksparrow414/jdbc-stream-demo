@@ -1,0 +1,19 @@
+version: "3.7"
+services:
+  pgdb:
+    shm_size: '1gb'
+    image: postgres:latest
+    container_name: pgdb
+    restart: "no"
+    ports:
+      - 5432:5432
+    command: postgres -c timezone='US/Eastern'
+    volumes:
+      - type: volume
+        source: pgdb-data
+        target: /var/lib/postgresql
+        read_only: false
+    env_file: 
+      - .env
+volumes:
+  pgdb-data:

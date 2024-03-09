@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Introduction -->
+<!-- The Context element represents a web application, which is run within a particular virtual host -->
+
+<!-- 每个context.xml代表一个独立的应用, 并且Tomcat文档也建议不要在server.xml中声明Context -->
+<!-- It is NOT recommended to place <Context> elements directly in the server.xml file. --> 
+<!-- This is because it makes modifying the Context configuration more invasive since the main conf/server.xml file cannot be reloaded without restarting Tomcat -->
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Defining_a_context -->
+<!-- In an individual file at /META-INF/context.xml inside the application files -->
+
+<Context crossContext="true">
+      
+<!--    在Tomcat使用Weld-->
+<!--    https://balusc.omnifaces.org/2013/10/how-to-install-cdi-in-tomcat.html-->
+<!--    https://docs.jboss.org/weld/reference/latest-3.1/en-US/html_single/#_tomcat-->
+<!--    <Resource name="BeanManager"-->
+<!--              auth="Container"-->
+<!--              type="javax.enterprise.inject.spi.BeanManager"-->
+<!--              factory="org.jboss.weld.resources.ManagerObjectFactory" />-->
+
+<!--    查看Weld文档中Application servers and environments supported by Weld 一节-->
+    <Resource name="BeanManager"
+              auth="Container"
+              type="jakarta.enterprise.inject.spi.BeanManager"
+              factory="org.jboss.weld.resources.ManagerObjectFactory" />
+
+<!--    不需要修改Tomcat server.xml-->
+<!-- https://tomcat.apache.org/tomcat-9.0-doc/config/context.html#Resource_Definitions -->
+<!-- This is equivalent to the inclusion of the following element in the web application deployment descriptor (/WEB-INF/web.xml): <resource-ref> -->
+<!-- 在context.xml中定义resource和在web.xml中使用resource-ref标签一样-->
+
+    <!-- 使用Tomcat自己的连接池而不是DBCP -->
+    <!-- https://tomcat.apache.org/tomcat-9.0-doc/jdbc-pool.html#JNDI_Factory_and_Type -->
+    <!-- 下列参数对应Tomcat自己的连接池而不是DBCP -->
+    <Resource name="jdbc/myLocalJPADB"
+              auth="Container"
+              factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
+              type="javax.sql.DataSource"
+              driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/postgres?currentSchema=public"
+              username="postgres"
+              password="12345"
+              maxActive="100"
+              maxIdle="20"
+              minIdle="5"
+              maxWait="10000"/>
+        
+</Context>
