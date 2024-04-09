@@ -105,6 +105,10 @@ public class JdbcStreamService {
     /**
      * 1、将JPA的Query转换为Hibernate的Query
      * 2、使用JPA的getResultStream
+     * 3、detach object防止OOM: if you are processing a huge number of objects and need to manage memory efficiently, 
+     * the evict() method can be used to remove the object and its collections from the first-level cache
+     * https://docs.jboss.org/hibernate/orm/6.3/userguide/html_single/Hibernate_User_Guide.html#_evicting_entities
+     *
      * https://docs.jboss.org/hibernate/orm/6.3/userguide/html_single/Hibernate_User_Guide.html#jpql-api-stream
      * unwrap非常有用，可以使用Hibernate的Query接口，类似的还有EntityManager.unwrap(Session.class)
      * https://docs.jboss.org/hibernate/orm/6.3/userguide/html_single/Hibernate_User_Guide.html#pc-unwrap
